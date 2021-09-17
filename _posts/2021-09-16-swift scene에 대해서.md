@@ -2,6 +2,7 @@
 
 ## AppDelegate & SceneDelegate
 * 그림 찾아서 넣어줄 것
+
 AppDelegate
 Process LifeCycle       UI LifeCycle
 App Launched            Entered Foreground
@@ -11,6 +12,7 @@ App Terminate           Became Active
 ->
 
 * 그림 찾아서 넣어줄 것
+
 AppDelegate                 SceneDelegate
 Process LifeCycle           UI LifeCycle
                                         Entered Foreground
