@@ -1,24 +1,22 @@
 ## SceneDelegate
 
 ## AppDelegate & SceneDelegate
-* 그림 찾아서 넣어줄 것
+* **AppDelegate**
 
-AppDelegate
-Process LifeCycle       UI LifeCycle
-App Launched            Entered Foreground
-App Terminate           Became Active
-...                                 ...
+### iOS 13 미만
+|Process LifeCycle|UI LifeCycle|
+|-|-|
+|App Launched|Entered Foreground|
+|App Terminate|Became Active|
+|...|...|
 
-->
-
-* 그림 찾아서 넣어줄 것
-
-AppDelegate                 SceneDelegate
-Process LifeCycle           UI LifeCycle
-                                        Entered Foreground
-Scene LifeCycle             Became Active
-Session Created              
-Session Discarded               
+### iOS 13이상
+|AppDelegate|SceneDelegate|
+|-|-|
+|Process LifeCycle|UI LifeCycle|     
+|Scene LifeCycle|Entered Foreground
+|Session Created|Became Active             
+|Session Discarded|               
 
 
 iOS12까지는 하나의 앱은 하나의 window로 구성되어 있었다.
