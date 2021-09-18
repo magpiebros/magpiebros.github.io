@@ -103,7 +103,7 @@ analytics:
 author:
   name             : "magpiebros"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "개발을 좋아하는 사람"
+  bio              : "Swift, RxSwift"
   location         : "Somewhere"
   email            : "magpiebros@gmail.com"
   links:
