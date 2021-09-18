@@ -12,7 +12,9 @@
   <head>
     {% include head.html %}
     {% include head/custom.html %}
+    <!-- 네이버 구글 다음 검색 설정 -->
     <meta name="naver-site-verification" content="8a188b59550b823b2410bc096fb9b815f5a1e5c5" />
+    <meta name="google-site-verification" content="nCBqy4QDrS0W-H5niCpYM5NBuZIrkGVBZb-sjyP0UqY" />
   </head>
 
   <body class="layout--{{ page.layout | default: layout.layout }}{% if page.classes or layout.classes %}{{ page.classes | default: layout.classes | join: ' ' | prepend: ' ' }}{% endif %}">
