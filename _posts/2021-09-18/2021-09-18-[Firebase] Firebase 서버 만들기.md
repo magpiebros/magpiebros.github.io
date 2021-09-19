@@ -19,9 +19,7 @@ iOS_Server % npm install -g firebase-tools
 ```
 
 npm install 에러시 아래 링크 내용을 참고해보면 도움이 될것 같다.
-
-TODO:// 링크 내용 적용할것
-[2021-09-18-[npm] npm cli 명령어 오류 발생시]()
+[2021-09-18-[npm] npm cli 명령어 오류 발생시](https://magpiebros.github.io/npm-npm-cli-%EB%AA%85%EB%A0%B9%EC%96%B4-%EC%98%A4%EB%A5%98-%EB%B0%9C%EC%83%9D%EC%8B%9C/)
 
 ## 3. firebase 명령어 동작 안함
 
