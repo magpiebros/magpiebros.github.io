@@ -7,7 +7,7 @@
 
 눈물을 머금고 다시 결제했다. 추후에 패밀리 사용권 결제에 사용하기로 기약하면서…
 
-![인트로 이미지](https://github.com/magpiebros/magpiebros.github.io/blob/master/_posts/2021-09-26/2021-09-26-intro.jpeg)
+![인트로 이미지](https://github.com/magpiebros/magpiebros.github.io/blob/master/_posts/2021-09-26/2021-09-26-intro.jpeg?raw=true)
 
 ## 게임 체험기
 악마때문에 잠을 못잔 수도승의 시네마틱.. 끝내주고..
@@ -15,10 +15,10 @@
 
 첫번째 퀘스트 완료
 역시 RPG는 이런 기분때문에 하는거 아니였냐! 국산 게임업계는 각성해라!
-![인트로 이미지](https://github.com/magpiebros/magpiebros.github.io/blob/master/_posts/2021-09-26/2021-09-26-quest-done.jpeg)
+![인트로 이미지](https://github.com/magpiebros/magpiebros.github.io/blob/master/_posts/2021-09-26/2021-09-26-quest-done.jpeg?raw=true)
 
 약 2시간의 게임후 내 레벨...
-![2시간 후](https://github.com/magpiebros/magpiebros.github.io/blob/master/_posts/2021-09-26/2021-09-26-2hours.jpeg)
+![2시간 후](https://github.com/magpiebros/magpiebros.github.io/blob/master/_posts/2021-09-26/2021-09-26-2hours.jpeg?raw=true)
 
 ## 게임을 2시간 진행해본 소감
 ### 단점
