@@ -3,33 +3,33 @@
 
 #### < magpiebros >('https://magpiebros.github.io'이하 '개발자'는 이용자의 개인정보를 매우 중요하게 생각하며 아래와 같은 개인정보처리방침을 가지고 있습니다. 이용자는 개발자에 개인정보를 제공함으로써 본 개인정보처리방침의 개인정보 수집, 사용 및 제공에 대해 충분히 이해하고 동의한 것으로 간주됩니다. 만일, 본 개인정보처리방침에 대해 동의하지 않는다면 개인정보 제공을 거부하시기 바랍니다. 개발자는 개인정보 처리방침을 개정하는 경우 개정이유 및 개정내용에 관하여 웹사이트 (또는 개별공지)를 통하여 공지할 것입니다.
 #### 이 개인정보처리방침은 2022년 7월 10일부터 적용됩니다.  
-* 공고일자 : 2022년 7월 10일
-* 시행일자 : 2022년 7월 10일
+#### * 공고일자 : 2022년 7월 10일
+#### * 시행일자 : 2022년 7월 10일
 <br>  
 
 ### 제1조(개인정보의 처리 목적)
 #### 개발자는 다음의 목적을 위하여 개인정보를 처리합니다. 처리하고 있는 개인정보는 다음의 목적 이외의 용도로는 이용되지 않으며 이용 목적이 변경되는 경우에는 「개인정보 보호법」 제18조에 따라 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다.
 <br>
 
-* 앱에서 저장하는 개인정보 없음
-* Admob(광고 프로그램)을 포함하고 있으며, Admob의 #### 개인정보처리방침은 https://policies.google.com/privacy?hl=ko 에서 확인하실 수 있습니다.
-* 서비스 개선을 위해 Google Analytics 를 사용하고 있으며, Google Analytics 를 통해 다음 정보를 수집할 수 있습니다 : 앱 설치, 삭제, 업데이트 이벤트 / 사용 디바이스 기종 및 운영체제 / 앱 이벤트 위치, 성별, 연령, 유입경로
-* Google Analytics 서비스 약관 : http://www.google.com/analytics/terms/us.html
-* Google 개인정보보호 정책 : http://www.google.com/intl/en/policies/privacy/
+#### * 앱에서 저장하는 개인정보 없음
+#### * Admob(광고 프로그램)을 포함하고 있으며, Admob의 #### 개인정보처리방침은 https://policies.google.com/privacy?hl=ko 에서 확인하실 수 있습니다.
+#### * 서비스 개선을 위해 Google Analytics 를 사용하고 있으며, Google Analytics 를 통해 다음 정보를 수집할 수 있습니다 : 앱 설치, 삭제, 업데이트 이벤트 / 사용 디바이스 기종 및 운영체제 / 앱 이벤트 위치, 성별, 연령, 유입경로
+#### * Google Analytics 서비스 약관 : http://www.google.com/analytics/terms/us.html
+#### * Google 개인정보보호 정책 : http://www.google.com/intl/en/policies/privacy/
 <br>
 
 ### 제2조(개인정보의 처리 및 보유기간) 
 #### 개발자는 법령에 따른 개인정보 보유․이용기간 또는 정보주체로부터 개인정보를 수집시에 동의받은 개인정보 보유이용기간 내에서 개인정보를 처리, 보유합니다. 각각의 개인정보 처리 및 보유 기간은 다음과 같습니다. 
-* 앱: 개인정보를 보유하지 않음
-* Admob, Google Analytics : Admob과 Google Analytics의 개인정보처리방침은 https://policies.google.com/privacy?hl=ko 에서 확인하실 수 있습니다.
+#### * 앱: 개인정보를 보유하지 않음
+#### * Admob, Google Analytics : Admob과 Google Analytics의 개인정보처리방침은 https://policies.google.com/privacy?hl=ko 에서 확인하실 수 있습니다.
 
 ### 제3조(개인정보의 제3자 제공) 
 #### 개발자는 정보주체의 개인정보를 제1조(개인정보의 처리 목적)에서 명시한 범위 내에서만 처리하며, 정보주체의 동의, 법률의 특별한 규정 등 개인정보 보호법 제17조 및 제18조에 해당하는 경우에만 개인정보를 제3자에게 제공합니다. 개발자는 다음과 같이 개인정보를 제3자에게 제공하고 있습니다.
 
 #### 1. Admob, Google Analytics, Google Firebase Cloud Messaging
-* 제공받는 자의 개인정보 이용목적 : 콘텐츠와 광고를 포함한 맞춤 서비스 제공. https://policies.google.com/privacy?hl=ko#whycollect
-* 제공하는 개인정보 항목 : https://policies.google.com/privacy?hl=ko#infocollect
-* 제공받는 자의 보유․이용기간 : https://policies.google.com/technologies/retention?hl=ko  
+#### * 제공받는 자의 개인정보 이용목적 : 콘텐츠와 광고를 포함한 맞춤 서비스 제공. https://policies.google.com/privacy?hl=ko#whycollect
+#### * 제공하는 개인정보 항목 : https://policies.google.com/privacy?hl=ko#infocollect
+#### * 제공받는 자의 보유․이용기간 : https://policies.google.com/technologies/retention?hl=ko  
 <br>
 
 ### 제4조(개인정보처리의 위탁)
@@ -47,46 +47,46 @@
 
 ### 제6조(처리하는 개인정보 항목)
 #### 개발자는 다음의 개인정보 항목을 처리하고 있습니다. 
-* 앱 : 없음
-* Admob, Google Analytics, Google Firebase Cloud Messaging : https://policies.google.com/privacy?hl=ko#infocollect
+#### * 앱 : 없음
+#### * Admob, Google Analytics, Google Firebase Cloud Messaging : https://policies.google.com/privacy?hl=ko#infocollect
 <br>
 
 ### 제7조(개인정보의 파기) 
 #### 개발자는 개인정보 보유기간의 경과, 처리목적 달성 등 개인정보가 불필요하게 되었을 때에는 지체없이 해당 개인정보를 파기합니다. 정보주체로부터 동의받은 개인정보 보유기간이 경과하거나 처리목적이 달성되었음에도 불구하고 다른 법령에 따라 개인정보를 계속 보존하여야 하는 경우에는, 해당 개인정보를 별도의 데이터베이스(DB)로 옮기거나 보관장소를 달리하여 보존합니다. 개인정보 파기의 절차 및 방법은 다음과 같습니다. 
-1. 파기절차
-* 앱 : 파기 사유가 발생한 개인정보를 선정하고, 개인정보 보호책임자(개발자)의 승인을 받아 개인정보를 파기합니다. 
-* Admob, Google Analytics, Google Firebase Cloud Messaging : https://policies.google.com/technologies/retention?hl=ko
-2. 파기방법
-* 앱 : 전자적 파일 형태로 기록․저장된 개인정보는 기록을 재생할 수 없도록 파기하며, 종이 문서에 기록․저장된 개인정보는 분쇄기로 분쇄하거나 소각하여 파기합니다. 
-* Admob, Google Analytics, Google Firebase Cloud Messaging : https://policies.google.com/technologies/retention?hl=ko
+#### 1. 파기절차
+#### * 앱 : 파기 사유가 발생한 개인정보를 선정하고, 개인정보 보호책임자(개발자)의 승인을 받아 개인정보를 파기합니다. 
+#### * Admob, Google Analytics, Google Firebase Cloud Messaging : https://policies.google.com/technologies/retention?hl=ko
+#### 2. 파기방법
+#### * 앱 : 전자적 파일 형태로 기록․저장된 개인정보는 기록을 재생할 수 없도록 파기하며, 종이 문서에 기록․저장된 개인정보는 분쇄기로 분쇄하거나 소각하여 파기합니다. 
+#### * Admob, Google Analytics, Google Firebase Cloud Messaging : https://policies.google.com/technologies/retention?hl=ko
 <br>
 
 ### 제8조(개인정보의 안전성 확보조치)
 #### 개발자는 개인정보의 안전성 확보를 위해 다음과 같은 조치를 취하고 있습니다. 
-* 관리적 조치 : 내부관리계획 수립․시행, 정기적 직원 교육 등 
-* 기술적 조치 : 개인정보처리시스템 등의 접근권한 관리, 접근통제시스템 설치, 고유식별정보 등의 암호화
-* 물리적 조치 : 전산실, 자료보관실 등의 접근통제 
+#### * 관리적 조치 : 내부관리계획 수립․시행, 정기적 직원 교육 등 
+#### * 기술적 조치 : 개인정보처리시스템 등의 접근권한 관리, 접근통제시스템 설치, 고유식별정보 등의 암호화
+#### * 물리적 조치 : 전산실, 자료보관실 등의 접근통제 
 <br>
 
 ### 제9조(개인정보 자동 수집 장치의 설치∙운영 및 거부에 관한 사항)     
-1. 개발자는 이용자의 ADID/IDFA를 수집할 수 있습니다. ADID/IDFA란 모바일 앱 이용자의 광고 식별 값으로서, 사용자의 맞춤 서비스 제공이나 더 나은 환경의 광고를 제공하기 위한 측정을 위해 수집할 수 있습니다.
-거부방법
-* Android: 설정 → 구글(구글설정) → 광고 → 광고 맞춤설정 선택 해제
-* iOS: 설정 → 개인정보 보호 → 광고 → 광고 추적 제한
-2. 온라인 맞춤형 광고 서비스
-개발자는 다음과 같이 온라인 맞춤형 광고 사업자가 광고식별자 및 행태정보를 수집하도록 허용하고 있습니다.
-* 행태정보를 수집 및 처리하는 광고 사업자: Admob (Google)
-* 행태정보 수집 방법: 이용자가 개발자의 앱을 실행할 때 자동 수집 및 전송
+#### 1. 개발자는 이용자의 ADID/IDFA를 수집할 수 있습니다. ADID/IDFA란 모바일 앱 이용자의 광고 식별 값으로서, 사용자의 맞춤 서비스 제공이나 더 나은 환경의 광고를 제공하기 위한 측정을 위해 수집할 수 있습니다.
+#### 거부방법
+#### * Android: 설정 → 구글(구글설정) → 광고 → 광고 맞춤설정 선택 해제
+#### * iOS: 설정 → 개인정보 보호 → 광고 → 광고 추적 제한
+#### 2. 온라인 맞춤형 광고 서비스
+#### 개발자는 다음과 같이 온라인 맞춤형 광고 사업자가 광고식별자 및 행태정보를 수집하도록 허용하고 있습니다.
+#### * 행태정보를 수집 및 처리하는 광고 사업자: Admob (Google)
+#### * 행태정보 수집 방법: 이용자가 개발자의 앱을 실행할 때 자동 수집 및 전송
 <br>
 
 ### 제10조 (개인정보호책임자 등)
 #### 귀하께서는 개발자의 서비스를 이용하시며 발생하는 모든 개인정보보호 관련 민원을 신고하실 수 있습니다. 개발자는 신고사항에 대해 신속하게 충분한 답변을 드릴 것입니다.
-* 구분 : 개발자
-* 연락처 : magpiebros@gmail.com
-* 기타 개인정보침해에 대한 신고나 상담이 필요하신 경우에는 아래 기관에 문의하시기 바랍니다.
-* 개인정보침해신고센터 (http://www.118.or.kr / 국번없이 118)
-* 대검찰청 사이버범죄수사단 (http://www.spo.go.kr / 02-3480-200 )
-* 경찰청 사이버테러대응센터 (http://cyberbureau.police.go.kr / 국번없이 182)
+#### * 구분 : 개발자
+#### * 연락처 : magpiebros@gmail.com
+#### * 기타 개인정보침해에 대한 신고나 상담이 필요하신 경우에는 아래 기관에 문의하시기 바랍니다.
+#### * 개인정보침해신고센터 (http://www.118.or.kr / 국번없이 118)
+#### * 대검찰청 사이버범죄수사단 (http://www.spo.go.kr / 02-3480-200 )
+#### * 경찰청 사이버테러대응센터 (http://cyberbureau.police.go.kr / 국번없이 182)
 <br>
 
 ### 제11조 (고지의 의무)
