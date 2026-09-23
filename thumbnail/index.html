@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>썸네일 메이커 - MagpieBros</title>
+<meta name="description" content="유튜브·쇼츠·인스타 동영상 썸네일을 브라우저에서 바로 만드는 도구. 동영상에서 장면을 캡처하고 제목을 얹어 PNG/JPG로 저장하세요.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Jua&family=Noto+Sans+KR:wght@400;700;900&family=Gowun+Batang:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f5f7; --panel: #ffffff; --text: #1d2330; --muted: #6b7280;
+    --line: #e2e5ea; --accent: #e5322d; --accent-text: #ffffff; --field: #f8f9fb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14161b; --panel: #1d2027; --text: #e8eaef; --muted: #9aa1ad;
+      --line: #2e323b; --accent: #ff4d47; --accent-text: #ffffff; --field: #252932;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 14px/1.5 "Noto Sans KR", system-ui, sans-serif;
+  }
+  header {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 14px 20px; border-bottom: 1px solid var(--line); background: var(--panel);
+  }
+  header h1 { margin: 0; font-size: 18px; font-weight: 900; }
+  header a { color: var(--muted); text-decoration: none; font-size: 13px; }
+  main {
+    display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 20px;
+    padding: 20px; max-width: 1500px; margin: 0 auto;
+  }
+  @media (max-width: 960px) { main { grid-template-columns: 1fr; padding: 16px; } }
+
+  .stage { position: sticky; top: 16px; align-self: start; }
+  @media (max-width: 960px) { .stage { position: static; } }
+  .canvas-wrap {
+    background: repeating-conic-gradient(#0000000d 0 25%, transparent 0 50%) 0 0 / 20px 20px;
+    border: 1px solid var(--line); border-radius: 10px; padding: 12px;
+    display: flex; justify-content: center;
+  }
+  canvas {
+    display: block; max-width: 100%; max-height: 72vh; height: auto;
+    box-shadow: 0 4px 24px #0003; touch-action: none; cursor: grab;
+  }
+  canvas.dragging { cursor: grabbing; }
+  .hint { color: var(--muted); font-size: 12px; margin: 8px 2px 0; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
+  .panel { display: flex; flex-direction: column; gap: 14px; }
+  section {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px;
+  }
+  section h2 { margin: 0 0 10px; font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: .02em; }
+  label { display: block; font-size: 12px; color: var(--muted); margin: 10px 0 4px; }
+  label:first-of-type { margin-top: 0; }
+  input[type=text], textarea, select {
+    width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px;
+    background: var(--field); color: var(--text); font: inherit;
+  }
+  textarea { resize: vertical; min-height: 64px; }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  input[type=color] {
+    width: 100%; height: 34px; padding: 2px; border: 1px solid var(--line);
+    border-radius: 6px; background: var(--field);
+  }
+  input[type=file] { display: none; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .row > div > label, .row3 > div > label { margin-top: 10px; }
+  .check { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 13px; color: var(--text); }
+
+  button, .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 8px 12px; border: 1px solid var(--line); border-radius: 6px;
+    background: var(--field); color: var(--text); font: inherit; cursor: pointer;
+  }
+  button:hover, .btn:hover { border-color: var(--muted); }
+  button.primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); font-weight: 700; }
+  button.primary:hover { filter: brightness(1.08); }
+  .seg { display: flex; flex-wrap: wrap; gap: 6px; }
+  .seg button.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
+  .layers { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+  .layer-item {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; cursor: pointer;
+    white-space: nowrap; overflow: hidden;
+  }
+  .layer-item span { overflow: hidden; text-overflow: ellipsis; }
+  .layer-item.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+  .layer-item button { padding: 2px 8px; font-size: 12px; flex-shrink: 0; }
+  .video-box { display: none; margin-top: 10px; }
+  .video-box.show { display: block; }
+  .time { font-variant-numeric: tabular-nums; font-size: 12px; color: var(--muted); }
+  .presets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .presets button { height: 34px; padding: 0; font-weight: 900; font-size: 13px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🎬 썸네일 메이커</h1>
+  <a href="/">← 블로그로</a>
+</header>
+
+<main>
+  <div class="stage">
+    <div class="canvas-wrap"><canvas id="cv" width="1280" height="720"></canvas></div>
+    <p class="hint">캔버스 위 글자를 드래그해서 위치를 옮길 수 있어요. 제목에 <b>[대괄호]</b>로 감싼 단어는 강조색으로 표시됩니다.</p>
+    <div class="actions">
+      <button class="primary" id="dlPng">PNG 저장</button>
+      <button class="primary" id="dlJpg">JPG 저장 (2MB 이하)</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <section>
+      <h2>크기</h2>
+      <div class="seg" id="sizeSeg">
+        <button data-w="1280" data-h="720" class="on">유튜브 16:9</button>
+        <button data-w="1080" data-h="1920">쇼츠/릴스 9:16</button>
+        <button data-w="1080" data-h="1080">정사각 1:1</button>
+        <button data-w="1080" data-h="1350">인스타 4:5</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>배경</h2>
+      <div class="seg">
+        <label class="btn" style="margin:0;color:var(--text)">🖼 이미지<input type="file" id="imgFile" accept="image/*"></label>
+        <label class="btn" style="margin:0;color:var(--text)">🎞 동영상에서 캡처<input type="file" id="vidFile" accept="video/*"></label>
+        <button id="clearBg">배경 지우기</button>
+      </div>
+      <div class="video-box" id="videoBox">
+        <label>장면 선택 <span class="time" id="timeLabel">0:00 / 0:00</span></label>
+        <input type="range" id="seek" min="0" max="1000" value="0" step="1">
+        <div class="seg" style="margin-top:6px">
+          <button id="stepBack">◀ 0.1초</button>
+          <button id="stepFwd">0.1초 ▶</button>
+          <button id="randomFrame">🎲 랜덤 장면</button>
+        </div>
+      </div>
+      <div class="row">
+        <div><label>배경색 1</label><input type="color" id="bg1" value="#1b1f3b"></div>
+        <div><label>배경색 2 (그라데이션)</label><input type="color" id="bg2" value="#e5322d"></div>
+      </div>
+      <label>확대 <span class="time" id="zoomVal">100%</span></label>
+      <input type="range" id="zoom" min="100" max="300" value="100">
+      <div class="row">
+        <div><label>가로 위치</label><input type="range" id="panX" min="0" max="100" value="50"></div>
+        <div><label>세로 위치</label><input type="range" id="panY" min="0" max="100" value="50"></div>
+      </div>
+      <label>어둡게</label>
+      <input type="range" id="dim" min="0" max="80" value="15">
+      <label>아래쪽 그림자 (글자 가독성)</label>
+      <input type="range" id="vignette" min="0" max="100" value="45">
+      <label>채도 / 대비 강조</label>
+      <input type="range" id="pop" min="0" max="60" value="15">
+    </section>
+
+    <section>
+      <h2>글자</h2>
+      <div class="layers" id="layerList"></div>
+      <button id="addLayer">+ 글자 추가</button>
+
+      <div id="layerEditor">
+        <label>내용 (줄바꿈 가능, [강조])</label>
+        <textarea id="t_text"></textarea>
+        <div class="row">
+          <div><label>글꼴</label>
+            <select id="t_font">
+              <option value="Black Han Sans">검은고딕 (Black Han Sans)</option>
+              <option value="Do Hyeon">도현 (Do Hyeon)</option>
+              <option value="Jua">주아 (Jua)</option>
+              <option value="Noto Sans KR:900">본고딕 Black</option>
+              <option value="Noto Sans KR:700">본고딕 Bold</option>
+              <option value="Gowun Batang:700">고운바탕 Bold</option>
+            </select>
+          </div>
+          <div><label>크기 <span class="time" id="sizeVal"></span></label><input type="range" id="t_size" min="20" max="300"></div>
+        </div>
+        <div class="row3">
+          <div><label>글자색</label><input type="color" id="t_color"></div>
+          <div><label>강조색</label><input type="color" id="t_accent"></div>
+          <div><label>테두리색</label><input type="color" id="t_stroke"></div>
+        </div>
+        <div class="row">
+          <div><label>테두리 두께</label><input type="range" id="t_strokeW" min="0" max="40"></div>
+          <div><label>줄 간격</label><input type="range" id="t_lh" min="80" max="160"></div>
+        </div>
+        <div class="row">
+          <div><label>기울기</label><input type="range" id="t_rot" min="-20" max="20"></div>
+          <div><label>정렬</label>
+            <select id="t_align">
+              <option value="left">왼쪽</option>
+              <option value="center">가운데</option>
+              <option value="right">오른쪽</option>
+            </select>
+          </div>
+        </div>
+        <label class="check"><input type="checkbox" id="t_shadow"> 그림자</label>
+        <label class="check"><input type="checkbox" id="t_box"> 배경 띠</label>
+        <div class="row" id="boxRow">
+          <div><label>띠 색</label><input type="color" id="t_boxColor"></div>
+          <div><label>띠 여백</label><input type="range" id="t_boxPad" min="0" max="60"></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>빠른 스타일 (선택한 글자에 적용)</h2>
+      <div class="presets" id="presets"></div>
+    </section>
+  </div>
+</main>
+
+<video id="vid" muted playsinline preload="auto" style="display:none"></video>
+
+<script>
+(() => {
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const vid = document.getElementById('vid');
+  const $ = id => document.getElementById(id);
+
+  const state = {
+    bgMode: 'color', // color | image | video
+    img: null,
+    bg1: '#1b1f3b', bg2: '#e5322d',
+    zoom: 1, panX: 0.5, panY: 0.5, dim: 0.15, vignette: 0.45, pop: 0.15,
+    layers: [],
+    sel: 0,
+  };
+
+  let uid = 0;
+  function makeLayer(over) {
+    return Object.assign({
+      id: ++uid,
+      text: '새 글자',
+      font: 'Black Han Sans', size: 120,
+      color: '#ffffff', accent: '#ffe100', stroke: '#000000', strokeW: 14,
+      lh: 105, rot: 0, align: 'left', shadow: true,
+      box: false, boxColor: '#e5322d', boxPad: 18,
+      x: 0.06, y: 0.5, // anchor, relative to canvas
+    }, over);
+  }
+
+  state.layers.push(makeLayer({
+    text: '이걸 [몰랐다고?]\n진짜 충격 실화', size: 140, x: 0.06, y: 0.62,
+  }));
+  state.layers.push(makeLayer({
+    text: 'EP.01', font: 'Noto Sans KR:900', size: 54, strokeW: 0, shadow: false,
+    box: true, boxColor: '#e5322d', boxPad: 16, x: 0.06, y: 0.14,
+  }));
+
+  // ---------- font helpers ----------
+  function fontSpec(l, size) {
+    const [family, weight] = l.font.split(':');
+    return `${weight || 400} ${size}px "${family}", "Noto Sans KR", sans-serif`;
+  }
+
+  // Split a line into segments; [text] marks accent-colored parts.
+  function segments(line) {
+    const out = [];
+    const re = /\[([^\]]*)\]/g;
+    let last = 0, m;
+    while ((m = re.exec(line))) {
+      if (m.index > last) out.push({ t: line.slice(last, m.index), a: false });
+      out.push({ t: m[1], a: true });
+      last = re.lastIndex;
+    }
+    if (last < line.length) out.push({ t: line.slice(last), a: false });
+    return out;
+  }
+
+  // Measure a layer; returns lines with widths and the bounding box (unrotated, canvas coords).
+  function layout(l) {
+    const size = l.size * (cv.width / 1280);
+    ctx.font = fontSpec(l, size);
+    const lines = l.text.split('\n').map(raw => {
+      const segs = segments(raw).map(s => ({ ...s, w: ctx.measureText(s.t).width }));
+      return { segs, w: segs.reduce((a, s) => a + s.w, 0) };
+    });
+    const lineH = size * l.lh / 100;
+    const maxW = Math.max(1, ...lines.map(li => li.w));
+    const totalH = lineH * lines.length;
+    const ax = l.x * cv.width, ay = l.y * cv.height;
+    let left = ax;
+    if (l.align === 'center') left = ax - maxW / 2;
+    if (l.align === 'right') left = ax - maxW;
+    const top = ay - totalH / 2;
+    return { size, lines, lineH, maxW, totalH, ax, ay, left, top };
+  }
+
+  // ---------- rendering ----------
+  function drawCover(src, sw, sh) {
+    const W = cv.width, H = cv.height;
+    const scale = Math.max(W / sw, H / sh) * state.zoom;
+    const dw = sw * scale, dh = sh * scale;
+    const dx = (W - dw) * state.panX, dy = (H - dh) * state.panY;
+    ctx.drawImage(src, dx, dy, dw, dh);
+  }
+
+  function drawBackground() {
+    const W = cv.width, H = cv.height;
+    ctx.save();
+    const g = ctx.createLinearGradient(0, 0, W, H);
+    g.addColorStop(0, state.bg1);
+    g.addColorStop(1, state.bg2);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+
+    const p = state.pop;
+    ctx.filter = p > 0 ? `saturate(${1 + p * 1.5}) contrast(${1 + p * 0.6})` : 'none';
+    if (state.bgMode === 'image' && state.img) {
+      drawCover(state.img, state.img.naturalWidth, state.img.naturalHeight);
+    } else if (state.bgMode === 'video' && vid.videoWidth) {
+      drawCover(vid, vid.videoWidth, vid.videoHeight);
+    }
+    ctx.filter = 'none';
+
+    if (state.dim > 0) {
+      ctx.fillStyle = `rgba(0,0,0,${state.dim})`;
+      ctx.fillRect(0, 0, W, H);
+    }
+    if (state.vignette > 0) {
+      const vg = ctx.createLinearGradient(0, H * 0.35, 0, H);
+      vg.addColorStop(0, 'rgba(0,0,0,0)');
+      vg.addColorStop(1, `rgba(0,0,0,${state.vignette * 0.9})`);
+      ctx.fillStyle = vg;
+      ctx.fillRect(0, 0, W, H);
+    }
+    ctx.restore();
+  }
+
+  function drawLayer(l, selected) {
+    const L = layout(l);
+    ctx.save();
+    ctx.translate(L.ax, L.ay);
+    ctx.rotate(l.rot * Math.PI / 180);
+    ctx.translate(-L.ax, -L.ay);
+    ctx.font = fontSpec(l, L.size);
+    ctx.textBaseline = 'middle';
+    ctx.lineJoin = 'round';
+    ctx.miterLimit = 2;
+
+    if (l.box) {
+      const pad = l.boxPad * (cv.width / 1280);
+      ctx.fillStyle = l.boxColor;
+      if (l.shadow) { ctx.shadowColor = 'rgba(0,0,0,.45)'; ctx.shadowBlur = L.size * 0.2; ctx.shadowOffsetY = L.size * 0.06; }
+      L.lines.forEach((li, i) => {
+        if (!li.w) return;
+        let lx = L.left;
+        if (l.align === 'center') lx = L.left + (L.maxW - li.w) / 2;
+        if (l.align === 'right') lx = L.left + L.maxW - li.w;
+        const cy = L.top + L.lineH * (i + 0.5);
+        const bh = L.size * 1.05 + pad;
+        ctx.fillRect(lx - pad, cy - bh / 2, li.w + pad * 2, bh);
+      });
+      ctx.shadowColor = 'transparent';
+    }
+
+    const sw = l.strokeW * (cv.width / 1280);
+    // Pass 1: shadow + stroke, pass 2: fill (so strokes never cover neighboring glyphs).
+    for (const pass of ['stroke', 'fill']) {
+      L.lines.forEach((li, i) => {
+        let x = L.left;
+        if (l.align === 'center') x = L.left + (L.maxW - li.w) / 2;
+        if (l.align === 'right') x = L.left + L.maxW - li.w;
+        const y = L.top + L.lineH * (i + 0.5);
+        for (const s of li.segs) {
+          if (pass === 'stroke') {
+            if (l.shadow && !l.box) {
+              ctx.shadowColor = 'rgba(0,0,0,.6)';
+              ctx.shadowBlur = L.size * 0.15;
+              ctx.shadowOffsetY = L.size * 0.05;
+            }
+            if (sw > 0) {
+              ctx.strokeStyle = l.stroke;
+              ctx.lineWidth = sw;
+              ctx.strokeText(s.t, x, y);
+            } else if (l.shadow && !l.box) {
+              ctx.fillStyle = s.a ? l.accent : l.color;
+              ctx.fillText(s.t, x, y);
+            }
+            ctx.shadowColor = 'transparent';
+          } else {
+            ctx.fillStyle = s.a ? l.accent : l.color;
+            ctx.fillText(s.t, x, y);
+          }
+          x += s.w;
+        }
+      });
+    }
+
+    if (selected && showSelection) {
+      const pad = 10 * (cv.width / 1280) + (l.box ? l.boxPad * (cv.width / 1280) : sw / 2);
+      ctx.strokeStyle = 'rgba(0,170,255,.9)';
+      ctx.lineWidth = Math.max(2, cv.width / 500);
+      ctx.setLineDash([12, 8]);
+      ctx.strokeRect(L.left - pad, L.top - pad, L.maxW + pad * 2, L.totalH + pad * 2);
+    }
+    ctx.restore();
+  }
+
+  let showSelection = true;
+  let raf = 0;
+  function render() {
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      drawBackground();
+      state.layers.forEach((l, i) => drawLayer(l, i === state.sel));
+    });
+  }
+  function renderNow(withSelection) {
+    showSelection = withSelection;
+    drawBackground();
+    state.layers.forEach((l, i) => drawLayer(l, i === state.sel));
+    showSelection = true;
+  }
+
+  // ---------- hit testing & dragging ----------
+  function toCanvas(e) {
+    const r = cv.getBoundingClientRect();
+    return { x: (e.clientX - r.left) * cv.width / r.width, y: (e.clientY - r.top) * cv.height / r.height };
+  }
+  function hit(p) {
+    for (let i = state.layers.length - 1; i >= 0; i--) {
+      const l = state.layers[i];
+      const L = layout(l);
+      // rotate point into layer space
+      const a = -l.rot * Math.PI / 180;
+      const dx = p.x - L.ax, dy = p.y - L.ay;
+      const px = L.ax + dx * Math.cos(a) - dy * Math.sin(a);
+      const py = L.ay + dx * Math.sin(a) + dy * Math.cos(a);
+      const pad = 16;
+      if (px >= L.left - pad && px <= L.left + L.maxW + pad && py >= L.top - pad && py <= L.top + L.totalH + pad) return i;
+    }
+    return -1;
+  }
+  let drag = null;
+  cv.addEventListener('pointerdown', e => {
+    const p = toCanvas(e);
+    const i = hit(p);
+    if (i < 0) return;
+    select(i);
+    const l = state.layers[i];
+    drag = { i, ox: p.x - l.x * cv.width, oy: p.y - l.y * cv.height };
+    cv.setPointerCapture(e.pointerId);
+    cv.classList.add('dragging');
+  });
+  cv.addEventListener('pointermove', e => {
+    if (!drag) return;
+    const p = toCanvas(e);
+    const l = state.layers[drag.i];
+    l.x = (p.x - drag.ox) / cv.width;
+    l.y = (p.y - drag.oy) / cv.height;
+    render();
+  });
+  const endDrag = () => { drag = null; cv.classList.remove('dragging'); };
+  cv.addEventListener('pointerup', endDrag);
+  cv.addEventListener('pointercancel', endDrag);
+
+  // ---------- layer UI ----------
+  const fields = ['text', 'font', 'size', 'color', 'accent', 'stroke', 'strokeW', 'lh', 'rot', 'align', 'shadow', 'box', 'boxColor', 'boxPad'];
+  const numeric = new Set(['size', 'strokeW', 'lh', 'rot', 'boxPad']);
+
+  function renderLayerList() {
+    const list = $('layerList');
+    list.innerHTML = '';
+    state.layers.forEach((l, i) => {
+      const item = document.createElement('div');
+      item.className = 'layer-item' + (i === state.sel ? ' on' : '');
+      const name = document.createElement('span');
+      name.textContent = l.text.replace(/\n/g, ' ').replace(/[\[\]]/g, '') || '(빈 글자)';
+      const del = document.createElement('button');
+      del.textContent = '삭제';
+      del.onclick = ev => {
+        ev.stopPropagation();
+        state.layers.splice(i, 1);
+        state.sel = Math.min(state.sel, state.layers.length - 1);
+        syncEditor(); renderLayerList(); render();
+      };
+      item.append(name, del);
+      item.onclick = () => select(i);
+      list.append(item);
+    });
+    $('layerEditor').style.display = state.layers.length ? '' : 'none';
+  }
+
+  function syncEditor() {
+    const l = state.layers[state.sel];
+    if (!l) return;
+    for (const f of fields) {
+      const el = $('t_' + f);
+      if (el.type === 'checkbox') el.checked = l[f];
+      else el.value = l[f];
+    }
+    $('sizeVal').textContent = l.size + 'px';
+    $('boxRow').style.display = l.box ? '' : 'none';
+  }
+
+  function select(i) {
+    state.sel = i;
+    syncEditor(); renderLayerList(); render();
+  }
+
+  for (const f of fields) {
+    const el = $('t_' + f);
+    el.addEventListener('input', () => {
+      const l = state.layers[state.sel];
+      if (!l) return;
+      l[f] = el.type === 'checkbox' ? el.checked : numeric.has(f) ? +el.value : el.value;
+      if (f === 'size') $('sizeVal').textContent = l.size + 'px';
+      if (f === 'box') $('boxRow').style.display = l.box ? '' : 'none';
+      if (f === 'text') renderLayerList();
+      render();
+    });
+  }
+
+  $('addLayer').onclick = () => {
+    state.layers.push(makeLayer({ x: 0.5, y: 0.5, align: 'center', size: 90 }));
+    select(state.layers.length - 1);
+    $('t_text').focus();
+    $('t_text').select();
+  };
+
+  // ---------- style presets ----------
+  const presets = [
+    { label: '기본', color: '#ffffff', accent: '#ffe100', stroke: '#000000', strokeW: 14, box: false, shadow: true },
+    { label: '노랑', color: '#ffe100', accent: '#ffffff', stroke: '#000000', strokeW: 16, box: false, shadow: true },
+    { label: '빨강띠', color: '#ffffff', accent: '#ffe100', stroke: '#000000', strokeW: 0, box: true, boxColor: '#e5322d', shadow: true },
+    { label: '검정띠', color: '#ffffff', accent: '#ff4d47', stroke: '#000000', strokeW: 0, box: true, boxColor: '#111111', shadow: false },
+    { label: '형광', color: '#39ff14', accent: '#ffffff', stroke: '#0a0a0a', strokeW: 14, box: false, shadow: true },
+    { label: '핑크', color: '#ffffff', accent: '#ff5fa2', stroke: '#6b0f3a', strokeW: 14, box: false, shadow: true },
+    { label: '뉴스', color: '#111111', accent: '#e5322d', stroke: '#ffffff', strokeW: 0, box: true, boxColor: '#ffffff', shadow: true },
+    { label: '심플', color: '#ffffff', accent: '#9ad0ff', stroke: '#000000', strokeW: 0, box: false, shadow: true },
+  ];
+  presets.forEach(p => {
+    const b = document.createElement('button');
+    b.textContent = p.label;
+    b.style.color = p.box ? p.color : p.color;
+    b.style.background = p.box ? p.boxColor : '#333';
+    b.style.webkitTextStroke = p.strokeW ? `1px ${p.stroke}` : '';
+    b.onclick = () => {
+      const l = state.layers[state.sel];
+      if (!l) return;
+      const { label, ...rest } = p;
+      Object.assign(l, rest);
+      syncEditor(); render();
+    };
+    $('presets').append(b);
+  });
+
+  // ---------- size ----------
+  $('sizeSeg').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    document.querySelectorAll('#sizeSeg button').forEach(x => x.classList.toggle('on', x === b));
+    cv.width = +b.dataset.w;
+    cv.height = +b.dataset.h;
+    render();
+  });
+
+  // ---------- background ----------
+  const bind = (id, key, fn) => $(id).addEventListener('input', e => { state[key] = fn(e.target.value); render(); });
+  bind('bg1', 'bg1', v => v);
+  bind('bg2', 'bg2', v => v);
+  bind('zoom', 'zoom', v => { $('zoomVal').textContent = v + '%'; return v / 100; });
+  bind('panX', 'panX', v => v / 100);
+  bind('panY', 'panY', v => v / 100);
+  bind('dim', 'dim', v => v / 100);
+  bind('vignette', 'vignette', v => v / 100);
+  bind('pop', 'pop', v => v / 100);
+
+  let imgUrl = null, vidUrl = null;
+  $('imgFile').addEventListener('change', e => {
+    const f = e.target.files[0];
+    if (!f) return;
+    if (imgUrl) URL.revokeObjectURL(imgUrl);
+    imgUrl = URL.createObjectURL(f);
+    const img = new Image();
+    img.onload = () => { state.img = img; state.bgMode = 'image'; $('videoBox').classList.remove('show'); render(); };
+    img.src = imgUrl;
+    e.target.value = '';
+  });
+
+  $('vidFile').addEventListener('change', e => {
+    const f = e.target.files[0];
+    if (!f) return;
+    if (vidUrl) URL.revokeObjectURL(vidUrl);
+    vidUrl = URL.createObjectURL(f);
+    vid.src = vidUrl;
+    e.target.value = '';
+  });
+  vid.addEventListener('loadedmetadata', () => {
+    state.bgMode = 'video';
+    $('videoBox').classList.add('show');
+    seekTo(Math.min(1, vid.duration / 3));
+  });
+  vid.addEventListener('seeked', () => { updateTime(); render(); });
+  vid.addEventListener('error', () => alert('이 동영상 형식은 브라우저에서 열 수 없어요. MP4(H.264)나 WebM으로 시도해 주세요.'));
+
+  const fmt = t => { t = Math.max(0, t || 0); const m = Math.floor(t / 60); const s = (t % 60).toFixed(1).padStart(4, '0'); return `${m}:${s}`; };
+  function updateTime() {
+    $('timeLabel').textContent = `${fmt(vid.currentTime)} / ${fmt(vid.duration)}`;
+    if (vid.duration) $('seek').value = Math.round(vid.currentTime / vid.duration * 1000);
+  }
+  function seekTo(t) {
+    if (!vid.duration) return;
+    vid.currentTime = Math.max(0, Math.min(vid.duration - 0.05, t));
+  }
+  $('seek').addEventListener('input', e => seekTo(e.target.value / 1000 * vid.duration));
+  $('stepBack').onclick = () => seekTo(vid.currentTime - 0.1);
+  $('stepFwd').onclick = () => seekTo(vid.currentTime + 0.1);
+  $('randomFrame').onclick = () => seekTo(Math.random() * vid.duration);
+
+  $('clearBg').onclick = () => {
+    state.bgMode = 'color'; state.img = null;
+    vid.removeAttribute('src'); vid.load();
+    $('videoBox').classList.remove('show');
+    render();
+  };
+
+  // ---------- export ----------
+  function fileName(ext) {
+    const l = state.layers[0];
+    const base = (l ? l.text : 'thumbnail').replace(/[\[\]\n\\/:*?"<>|]/g, ' ').trim().slice(0, 30) || 'thumbnail';
+    return `${base}_${cv.width}x${cv.height}.${ext}`;
+  }
+  function download(blob, name) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.append(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+  const toBlob = (type, q) => new Promise(res => cv.toBlob(res, type, q));
+
+  $('dlPng').onclick = async () => {
+    renderNow(false);
+    const b = await toBlob('image/png');
+    render();
+    download(b, fileName('png'));
+  };
+  $('dlJpg').onclick = async () => {
+    renderNow(false);
+    // YouTube limits custom thumbnails to 2MB; step quality down until it fits.
+    let q = 0.95, b = await toBlob('image/jpeg', q);
+    while (b.size > 2 * 1024 * 1024 && q > 0.4) { q -= 0.07; b = await toBlob('image/jpeg', q); }
+    render();
+    download(b, fileName('jpg'));
+  };
+
+  // ---------- init ----------
+  syncEditor();
+  renderLayerList();
+  render();
+  // Re-render once web fonts arrive (canvas won't pick them up otherwise).
+  if (document.fonts) {
+    const specs = ['400 40px "Black Han Sans"', '400 40px "Do Hyeon"', '400 40px "Jua"',
+      '700 40px "Noto Sans KR"', '900 40px "Noto Sans KR"', '700 40px "Gowun Batang"'];
+    Promise.all(specs.map(f => document.fonts.load(f, '가A').catch(() => {}))).then(render);
+    document.fonts.addEventListener && document.fonts.addEventListener('loadingdone', render);
+  }
+})();
+</script>
+</body>
+</html>
